@@ -1,4 +1,8 @@
 package com.openclassrooms.MediLaboSolutions.patient.repository;
 
-public class PatientRepository {
+import com.openclassrooms.MediLaboSolutions.patient.model.Patient;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface PatientRepository extends JpaRepository<Patient, Long> {
+
 }
