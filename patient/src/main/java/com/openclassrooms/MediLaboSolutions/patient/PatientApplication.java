@@ -1,4 +1,4 @@
-package com.openclassrooms.MediLabo_Solutions.patient;
+package com.openclassrooms.MediLaboSolutions.patient;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

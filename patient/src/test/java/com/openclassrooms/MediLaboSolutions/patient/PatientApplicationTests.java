@@ -1,4 +1,4 @@
-package com.openclassrooms.MediLabo_Solutions.patient;
+package com.openclassrooms.MediLaboSolutions.patient;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
