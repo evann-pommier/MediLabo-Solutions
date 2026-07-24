@@ -11,7 +11,7 @@
 	<groupId>com.openclassrooms.MediLaboSolutions</groupId>
 	<artifactId>gateway</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name/>
+	<name>gateway</name>
 	<description/>
 	<url/>
 	<licenses>

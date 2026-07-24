@@ -12,7 +12,7 @@
 		<relativePath/>
 	</parent>
 
-	<groupId>com.openclassrooms.medilabo</groupId>
+	<groupId>com.openclassrooms.MediLaboSolutions</groupId>
 	<artifactId>patient</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 
@@ -25,6 +25,12 @@
 
 
 	<dependencies>
+
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-test</artifactId>
+			<scope>test</scope>
+		</dependency>
 
 		<!-- API REST -->
 		<dependency>
