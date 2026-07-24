@@ -29,6 +29,7 @@
 
     <modules>
         <module>patient</module>
+        <module>gateway</module>
     </modules>
 
 </project>
