@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Détail patient - MediLabo Solutions</title>
+</head>
+<body>
+<h1 th:text="${patient.firstName} + ' ' + ${patient.lastName}"></h1>
+<ul>
+    <li>Date de naissance : <span th:text="${patient.dateOfBirth}"></span></li>
+    <li>Genre : <span th:text="${patient.gender}"></span></li>
+    <li>Adresse : <span th:text="${patient.address}"></span></li>
+    <li>Téléphone : <span th:text="${patient.phone}"></span></li>
+</ul>
+<a href="/patients">Retour à la liste</a>
+</body>
+</html>

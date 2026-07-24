@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Patients - MediLabo Solutions</title>
+</head>
+<body>
+<h1>Liste des patients</h1>
+<table border="1" cellpadding="6">
+    <tr>
+        <th>Nom</th>
+        <th>Prénom</th>
+        <th>Date de naissance</th>
+        <th>Genre</th>
+        <th></th>
+    </tr>
+    <tr th:each="patient : ${patients}">
+        <td th:text="${patient.lastName}"></td>
+        <td th:text="${patient.firstName}"></td>
+        <td th:text="${patient.dateOfBirth}"></td>
+        <td th:text="${patient.gender}"></td>
+        <td><a th:href="@{/patients/{id}(id=${patient.id})}">Détail</a></td>
+    </tr>
+</table>
+</body>
+</html>
