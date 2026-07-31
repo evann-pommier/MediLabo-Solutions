@@ -31,6 +31,7 @@
         <module>patient</module>
         <module>gateway</module>
         <module>front</module>
+        <module>notes</module>
     </modules>
 
 </project>
