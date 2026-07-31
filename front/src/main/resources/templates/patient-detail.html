@@ -12,6 +12,19 @@
     <li>Adresse : <span th:text="${patient.address}"></span></li>
     <li>Téléphone : <span th:text="${patient.phone}"></span></li>
 </ul>
+
+<h2>Notes du médecin</h2>
+<div th:each="n : ${notes}" style="border:1px solid #ccc; margin-bottom:10px; padding:8px;">
+    <p th:text="${n.note}" style="white-space: pre-wrap;"></p>
+</div>
+
+<h3>Ajouter une note</h3>
+<form th:action="@{/patients/{id}/notes(id=${patient.id})}" method="post">
+    <input type="hidden" name="patient" th:value="${patient.lastName}" />
+    <textarea name="note" rows="5" cols="50" required></textarea><br/>
+    <button type="submit">Ajouter la note</button>
+</form>
+
 <a href="/patients">Retour à la liste</a>
 </body>
 </html>
