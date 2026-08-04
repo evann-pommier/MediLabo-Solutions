@@ -1,4 +1,4 @@
-package com.openclassroom.MediLaboSolutions.gateway;
+package com.openclassrooms.MediLaboSolutions.gateway;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

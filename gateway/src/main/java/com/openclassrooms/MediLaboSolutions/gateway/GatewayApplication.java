@@ -1,4 +1,4 @@
-package com.openclassroom.MediLaboSolutions.gateway;
+package com.openclassrooms.MediLaboSolutions.gateway;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
