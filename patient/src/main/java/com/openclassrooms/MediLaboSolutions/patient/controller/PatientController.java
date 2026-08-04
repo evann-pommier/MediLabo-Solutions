@@ -4,6 +4,7 @@ package com.openclassrooms.MediLaboSolutions.patient.controller;
 import com.openclassrooms.MediLaboSolutions.patient.model.Patient;
 import com.openclassrooms.MediLaboSolutions.patient.service.PatientService;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -40,8 +41,8 @@ public class PatientController {
 
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public Patient createPatient(@Valid @RequestBody Patient patient) {
-
         return patientService.createPatient(patient);
     }
 
