@@ -6,6 +6,12 @@
 </head>
 <body>
 <h1 th:text="${patient.firstName} + ' ' + ${patient.lastName}"></h1>
+
+<p>
+    <strong>Niveau de risque de diabète :</strong>
+    <span th:text="${risk.risk}"></span>
+</p>
+
 <ul>
     <li>Date de naissance : <span th:text="${patient.dateOfBirth}"></span></li>
     <li>Genre : <span th:text="${patient.gender}"></span></li>

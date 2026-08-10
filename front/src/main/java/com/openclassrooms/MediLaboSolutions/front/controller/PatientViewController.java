@@ -2,6 +2,7 @@ package com.openclassrooms.MediLaboSolutions.front.controller;
 
 import com.openclassrooms.MediLaboSolutions.front.model.NoteDto;
 import com.openclassrooms.MediLaboSolutions.front.model.PatientDto;
+import com.openclassrooms.MediLaboSolutions.front.model.RiskDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -35,8 +36,11 @@ public class PatientViewController {
     public String patientDetail(@PathVariable Long id, Model model) {
         PatientDto patient = restTemplate.getForObject(gatewayBaseUrl + "/patients/" + id, PatientDto.class);
         NoteDto[] notes = restTemplate.getForObject(gatewayBaseUrl + "/notes/patient/" + id, NoteDto[].class);
+        RiskDto risk = restTemplate.getForObject(gatewayBaseUrl + "/assess/" + id, RiskDto.class);
+
         model.addAttribute("patient", patient);
         model.addAttribute("notes", notes);
+        model.addAttribute("risk", risk);
         return "patient-detail";
     }
 
