@@ -32,6 +32,7 @@
         <module>gateway</module>
         <module>front</module>
         <module>notes</module>
+        <module>risk</module>
     </modules>
 
 </project>
