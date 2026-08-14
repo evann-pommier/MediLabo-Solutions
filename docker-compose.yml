@@ -1,0 +1,78 @@
+services:
+
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: patient
+      POSTGRES_USER: patient_user
+      POSTGRES_PASSWORD: patient_pwd
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U patient_user -d patient"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  mongo:
+    image: mongo:7
+    ports:
+      - "27017:27017"
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  patient-service:
+    build: ./patient
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/patient
+      SPRING_DATASOURCE_USERNAME: patient_user
+      SPRING_DATASOURCE_PASSWORD: patient_pwd
+    ports:
+      - "8081:8081"
+
+  notes-service:
+    build: ./notes
+    depends_on:
+      mongo:
+        condition: service_healthy
+    environment:
+      SPRING_DATA_MONGODB_HOST: mongo
+    ports:
+      - "8083:8083"
+
+  risk-service:
+    build: ./risk
+    depends_on:
+      - patient-service
+      - notes-service
+    environment:
+      PATIENT_SERVICE_BASE_URL: http://patient-service:8081
+      NOTES_SERVICE_BASE_URL: http://notes-service:8083
+    ports:
+      - "8084:8084"
+
+  gateway-service:
+    build: ./gateway
+    depends_on:
+      - patient-service
+      - notes-service
+      - risk-service
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    ports:
+      - "8080:8080"
+
+  front-service:
+    build: ./front
+    depends_on:
+      - gateway-service
+    environment:
+      GATEWAY_BASE_URL: http://gateway-service:8080
+    ports:
+      - "8082:8082"
