@@ -1,0 +1,73 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: patient
+          POSTGRES_USER: patient_user
+          POSTGRES_PASSWORD: patient_pwd
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U patient_user -d patient"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 5
+
+      mongo:
+        image: mongo:7
+        ports:
+          - 27017:27017
+        options: >-
+          --health-cmd "mongosh --eval 'db.adminCommand(\"ping\")' --quiet"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Test patient-service
+        working-directory: ./patient
+        env:
+          SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/patient
+          SPRING_DATASOURCE_USERNAME: patient_user
+          SPRING_DATASOURCE_PASSWORD: patient_pwd
+        run: mvn -B test
+
+      - name: Test notes-service
+        working-directory: ./notes
+        env:
+          SPRING_DATA_MONGODB_HOST: localhost
+        run: mvn -B test
+
+      - name: Test risk-service
+        working-directory: ./risk
+        run: mvn -B test
+
+      - name: Test gateway-service
+        working-directory: ./gateway
+        run: mvn -B test
+
+      - name: Test front-service
+        working-directory: ./front
+        run: mvn -B test
