@@ -2,6 +2,7 @@ package com.openclassrooms.MediLaboSolutions.front.controller;
 
 import com.openclassrooms.MediLaboSolutions.front.model.NoteDto;
 import com.openclassrooms.MediLaboSolutions.front.model.PatientDto;
+import com.openclassrooms.MediLaboSolutions.front.model.RiskDto;
 
 import org.junit.jupiter.api.Test;
 
@@ -10,8 +11,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.client.RestTemplate;
-
-import java.time.LocalDate;
 
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
@@ -47,7 +46,7 @@ class PatientViewControllerTest {
     }
 
     @Test
-    void shouldDisplayPatientDetailWithNotes() throws Exception {
+    void shouldDisplayPatientDetailWithNotesAndRisk() throws Exception {
         PatientDto patient = new PatientDto();
         patient.setId(1L);
         patient.setLastName("TestNone");
@@ -55,16 +54,24 @@ class PatientViewControllerTest {
         NoteDto note = new NoteDto();
         note.setNote("Observation du médecin");
 
+        RiskDto risk = new RiskDto();
+        risk.setPatId(1L);
+        risk.setPatient("Test TestNone");
+        risk.setRisk("None");
+
         when(restTemplate.getForObject(eq("http://localhost:8080/patients/1"), eq(PatientDto.class)))
                 .thenReturn(patient);
         when(restTemplate.getForObject(eq("http://localhost:8080/notes/patient/1"), eq(NoteDto[].class)))
                 .thenReturn(new NoteDto[]{note});
+        when(restTemplate.getForObject(eq("http://localhost:8080/assess/1"), eq(RiskDto.class)))
+                .thenReturn(risk);
 
         mockMvc.perform(get("/patients/1"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("patient-detail"))
                 .andExpect(model().attributeExists("patient"))
-                .andExpect(model().attributeExists("notes"));
+                .andExpect(model().attributeExists("notes"))
+                .andExpect(model().attributeExists("risk"));
     }
 
     @Test
