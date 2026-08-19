@@ -5,6 +5,17 @@ import com.openclassrooms.MediLaboSolutions.notes.repository.NoteRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+/**
+ * Charge les notes de test des 4 patients fournis avec le sujet, au premier
+ * démarrage de l'application, pour permettre de valider les endpoints avec
+ * Postman sans devoir saisir les données manuellement.
+ * <p>
+ * Le {@code patId} de chaque note correspond à l'id SQL généré par
+ * patient-service au premier démarrage (1=TestNone, 2=TestBorderline,
+ * 3=TestInDanger, 4=TestEarlyOnset) — les deux jeux de données de test
+ * doivent donc être chargés dans le même ordre pour rester cohérents entre
+ * les deux microservices.
+ */
 @Component
 public class DataSeeder implements CommandLineRunner {
 
@@ -14,6 +25,12 @@ public class DataSeeder implements CommandLineRunner {
         this.noteRepository = noteRepository;
     }
 
+    /**
+     * Insère les 9 notes de test si la collection est vide.
+     * <p>
+     * La vérification {@code count() > 0} évite de dupliquer les notes à
+     * chaque redémarrage du conteneur/de l'application.
+     */
     @Override
     public void run(String... args) {
         if (noteRepository.count() > 0) {

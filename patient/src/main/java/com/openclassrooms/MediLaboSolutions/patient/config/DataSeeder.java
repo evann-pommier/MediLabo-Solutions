@@ -7,6 +7,16 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 
+/**
+ * Charge les 4 patients de test fournis avec le sujet, au premier
+ * démarrage de l'application, pour permettre de valider les endpoints avec
+ * Postman sans devoir saisir les données manuellement.
+ * <p>
+ * L'ordre d'insertion détermine les id SQL auto-générés (1=TestNone,
+ * 2=TestBorderline, 3=TestInDanger, 4=TestEarlyOnset) — ces id sont ensuite
+ * réutilisés comme {@code patId} dans les notes de test de notes-service,
+ * les deux jeux de données doivent donc rester alignés.
+ */
 @Component
 public class DataSeeder implements CommandLineRunner {
 
@@ -16,6 +26,12 @@ public class DataSeeder implements CommandLineRunner {
         this.patientRepository = patientRepository;
     }
 
+    /**
+     * Insère les 4 patients de test si la table est vide.
+     * <p>
+     * La vérification {@code count() > 0} évite de dupliquer les patients
+     * à chaque redémarrage du conteneur/de l'application.
+     */
     @Override
     public void run(String... args) {
         if (patientRepository.count() > 0) {
