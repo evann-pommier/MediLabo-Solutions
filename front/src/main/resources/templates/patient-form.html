@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${patient.id} != null ? 'Modifier le patient' : 'Ajouter un patient'">Patient</title>
+</head>
+<body>
+<h1 th:text="${patient.id} != null ? 'Modifier le patient' : 'Ajouter un patient'"></h1>
+
+<form th:if="${patient.id} != null"
+      th:action="@{/patients/{id}/edit(id=${patient.id})}"
+      th:object="${patient}" method="post">
+    <input type="hidden" th:field="*{id}" />
+
+    <label>Prénom : <input type="text" th:field="*{firstName}" required /></label><br/>
+    <label>Nom : <input type="text" th:field="*{lastName}" required /></label><br/>
+    <label>Date de naissance :
+        <input type="date" th:field="*{dateOfBirth}" required /></label><br/>
+    <label>Genre :
+        <select th:field="*{gender}">
+            <option value="F">F</option>
+            <option value="M">M</option>
+        </select>
+    </label><br/>
+    <label>Adresse : <input type="text" th:field="*{address}" /></label><br/>
+    <label>Téléphone : <input type="text" th:field="*{phone}" /></label><br/>
+
+    <button type="submit">Enregistrer les modifications</button>
+</form>
+
+<form th:if="${patient.id} == null"
+      th:action="@{/patients/new}"
+      th:object="${patient}" method="post">
+
+    <label>Prénom : <input type="text" th:field="*{firstName}" required /></label><br/>
+    <label>Nom : <input type="text" th:field="*{lastName}" required /></label><br/>
+    <label>Date de naissance :
+        <input type="date" th:field="*{dateOfBirth}" required /></label><br/>
+    <label>Genre :
+        <select th:field="*{gender}">
+            <option value="F">F</option>
+            <option value="M">M</option>
+        </select>
+    </label><br/>
+    <label>Adresse : <input type="text" th:field="*{address}" /></label><br/>
+    <label>Téléphone : <input type="text" th:field="*{phone}" /></label><br/>
+
+    <button type="submit">Créer le patient</button>
+</form>
+
+<a href="/patients">Retour à la liste</a>
+</body>
+</html>

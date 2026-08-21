@@ -24,6 +24,7 @@ public class PatientDto {
     private String lastName;
 
     /** Utilisée pour le calcul de l'âge dans risk-service. */
+    @org.springframework.format.annotation.DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate dateOfBirth;
 
     /** "M" ou "F" — utilisé avec l'âge pour déterminer le niveau de risque. */
