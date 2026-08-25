@@ -98,12 +98,32 @@ public class PatientViewController {
         return "redirect:/patients/" + id;
     }
 
+    /**
+     * Affiche le formulaire vierge de création d'un nouveau patient.
+     * <p>
+     * Le même template {@code patient-form.html} sert aussi bien à la
+     * création qu'à la modification : ici, un {@code PatientDto} vide
+     * (sans {@code id}) est passé au modèle, ce qui permet au template de
+     * savoir qu'il doit afficher le formulaire de création plutôt que de
+     * modification.
+     *
+     * @param model modèle Thymeleaf, alimenté avec un patient vide
+     * @return le nom de la vue "patient-form" (patient-form.html)
+     */
     @GetMapping("/patients/new")
     public String newPatientForm(Model model) {
         model.addAttribute("patient", new PatientDto());
         return "patient-form";
     }
 
+    /**
+     * Traite la soumission du formulaire de création d'un patient, puis
+     * redirige vers la fiche détail du patient nouvellement créé.
+     *
+     * @param patient données saisies dans le formulaire
+     * @param redirectAttributes non utilisé actuellement, réservé pour un futur message de confirmation
+     * @return une redirection vers la page détail du patient créé
+     */
     @PostMapping("/patients/new")
     public String createPatient(@ModelAttribute PatientDto patient, RedirectAttributes redirectAttributes) {
         PatientDto created = restTemplate.postForObject(gatewayBaseUrl + "/patients", patient, PatientDto.class);
@@ -111,6 +131,14 @@ public class PatientViewController {
         return "redirect:/patients/" + created.getId();
     }
 
+    /**
+     * Affiche le formulaire de modification pré-rempli avec les
+     * informations actuelles d'un patient existant.
+     *
+     * @param id identifiant du patient à modifier
+     * @param model modèle Thymeleaf, alimenté avec le patient existant
+     * @return le nom de la vue "patient-form" (patient-form.html)
+     */
     @GetMapping("/patients/{id}/edit")
     public String editPatientForm(@PathVariable Long id, Model model) {
         PatientDto patient = restTemplate.getForObject(gatewayBaseUrl + "/patients/" + id, PatientDto.class);
@@ -118,9 +146,48 @@ public class PatientViewController {
         return "patient-form";
     }
 
+    /**
+     * Traite la soumission du formulaire de modification d'un patient, puis
+     * redirige vers sa fiche détail mise à jour.
+     *
+     * @param id identifiant du patient à modifier
+     * @param patient nouvelles valeurs saisies dans le formulaire
+     * @return une redirection vers la page détail du patient modifié
+     */
     @PostMapping("/patients/{id}/edit")
     public String updatePatient(@PathVariable Long id, @ModelAttribute PatientDto patient) {
         restTemplate.put(gatewayBaseUrl + "/patients/" + id, patient);
         return "redirect:/patients/" + id;
+    }
+
+    /**
+     * Supprime un patient, puis redirige vers la liste des patients.
+     *
+     * @param id identifiant du patient à supprimer
+     * @return une redirection vers la liste des patients
+     */
+    @PostMapping("/patients/{id}/delete")
+    public String deletePatient(@PathVariable Long id) {
+        restTemplate.delete(gatewayBaseUrl + "/patients/" + id);
+        return "redirect:/patients";
+    }
+
+    /**
+     * Supprime une note, puis redirige vers la fiche détail du patient
+     * concerné.
+     * <p>
+     * {@code patId} n'est utilisé que pour construire l'URL de
+     * redirection après suppression — la suppression elle-même ne dépend
+     * que de {@code noteId} (l'identifiant MongoDB de la note), qui suffit
+     * à lui seul à identifier la note à supprimer.
+     *
+     * @param patId identifiant du patient concerné, utilisé uniquement pour la redirection
+     * @param noteId identifiant MongoDB de la note à supprimer
+     * @return une redirection vers la page détail du patient
+     */
+    @PostMapping("/patients/{patId}/notes/{noteId}/delete")
+    public String deleteNote(@PathVariable Long patId, @PathVariable String noteId) {
+        restTemplate.delete(gatewayBaseUrl + "/notes/" + noteId);
+        return "redirect:/patients/" + patId;
     }
 }

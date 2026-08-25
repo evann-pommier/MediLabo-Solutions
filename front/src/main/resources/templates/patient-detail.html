@@ -6,7 +6,10 @@
 </head>
 <body>
 <h1 th:text="${patient.firstName} + ' ' + ${patient.lastName}"></h1>
-<a th:href="@{/patients/{id}/edit(id=${patient.id})}">Modifier ce patient</a>
+
+<form th:action="@{/patients/{id}/edit(id=${patient.id})}" method="get">
+    <button type="submit">Modifier ce patient</button>
+</form>
 
 <p>
     <strong>Niveau de risque de diabète :</strong>
@@ -23,6 +26,10 @@
 <h2>Notes du médecin</h2>
 <div th:each="n : ${notes}" style="border:1px solid #ccc; margin-bottom:10px; padding:8px;">
     <p th:text="${n.note}" style="white-space: pre-wrap;"></p>
+    <form th:action="@{/patients/{patId}/notes/{noteId}/delete(patId=${patient.id}, noteId=${n.id})}" method="post"
+          onsubmit="return confirm('Supprimer cette note ?');">
+        <button type="submit">Supprimer la note</button>
+    </form>
 </div>
 
 <h3>Ajouter une note</h3>
@@ -32,6 +39,13 @@
     <button type="submit">Ajouter la note</button>
 </form>
 
-<a href="/patients">Retour à la liste</a>
+<form th:action="@{/patients/{id}/delete(id=${patient.id})}" method="post"
+      onsubmit="return confirm('Supprimer ce patient ? Cette action est irréversible.');">
+    <button type="submit">Supprimer ce patient</button>
+</form>
+
+<form th:action="@{/patients}" method="get">
+    <button type="submit">Retour à la liste</button>
+</form>
 </body>
 </html>

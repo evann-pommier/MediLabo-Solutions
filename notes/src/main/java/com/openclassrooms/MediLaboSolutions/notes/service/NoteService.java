@@ -46,4 +46,12 @@ public class NoteService {
         note.setId(null);
         return noteRepository.save(note);
     }
+    /**
+     * Supprime une note.
+     *
+     * @param id identifiant MongoDB de la note à supprimer
+     */
+    public void deleteNote(String id) {
+        noteRepository.deleteById(id);
+    }
 }
