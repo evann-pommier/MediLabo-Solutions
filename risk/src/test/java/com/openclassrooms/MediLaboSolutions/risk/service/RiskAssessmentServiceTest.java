@@ -7,6 +7,7 @@ import com.openclassrooms.MediLaboSolutions.risk.model.RiskLevel;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
+import java.time.Period;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -102,5 +103,16 @@ class RiskAssessmentServiceTest {
         int count = service.countTriggers(notes);
 
         assertThat(count).isEqualTo(1);
+    }
+
+    @Test
+    void shouldCalculateAgeCorrectly() {
+        LocalDate dateOfBirth = LocalDate.of(2000, 1, 1);
+
+        int expectedAge = Period.between(dateOfBirth, LocalDate.now()).getYears();
+
+        int result = service.calculateAge(dateOfBirth);
+
+        assertThat(result).isEqualTo(expectedAge);
     }
 }
